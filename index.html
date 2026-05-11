@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Nexus — Calcula tu Promedio</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%234f46e5'/><text y='.85em' font-size='65' x='12'>🧮</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 42 42'><defs><linearGradient id='bg' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%234f46e5'/><stop offset='100%25' stop-color='%2306b6d4'/></linearGradient></defs><rect width='42' height='42' rx='12' fill='url(%23bg)'/><line x1='11' y1='31' x2='11' y2='11' stroke='white' stroke-width='3.5' stroke-linecap='round'/><line x1='31' y1='31' x2='31' y2='11' stroke='white' stroke-width='3.5' stroke-linecap='round'/><line x1='11' y1='11' x2='31' y2='31' stroke='white' stroke-width='3.5' stroke-linecap='round'/></svg>">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-9JET1QQKVZ"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-9JET1QQKVZ');</script>
 <style>
@@ -41,10 +41,11 @@ main{position:relative;z-index:1;max-width:760px;margin:0 auto;padding:3rem 1.5r
 .subject-row{display:grid;grid-template-columns:1fr 140px 44px;gap:.6rem;align-items:center;animation:slideIn .3s ease both}
 @keyframes slideIn{from{opacity:0;transform:translateX(-12px)}to{opacity:1;transform:translateX(0)}}
 
-.subject-row input{background:var(--s2);border:1px solid var(--border);border-radius:10px;padding:.7rem 1rem;color:var(--text);font-family:var(--font);font-size:.92rem;font-weight:500;width:100%;outline:none;transition:border-color .2s,box-shadow .2s}
+.subject-row input{background:var(--s2);border:1px solid var(--border);border-radius:10px;padding:.7rem 1rem;color:var(--text);font-family:var(--font);font-size:.92rem;font-weight:500;width:100%;outline:none;transition:border-color .2s,box-shadow .2s;-webkit-appearance:none}
 .subject-row input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(79,70,229,.15)}
 .subject-row input::placeholder{color:var(--muted)}
 .subject-row input[type=number]{text-align:center}
+.subject-row input.error{border-color:var(--danger);box-shadow:0 0 0 3px rgba(239,68,68,.12)}
 
 .btn-remove{width:44px;height:44px;background:none;border:1px solid var(--border);border-radius:10px;color:var(--muted);cursor:pointer;font-size:1.1rem;transition:all .2s;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .btn-remove:hover{border-color:var(--danger);color:var(--danger);background:rgba(239,68,68,.08)}
@@ -81,6 +82,10 @@ main{position:relative;z-index:1;max-width:760px;margin:0 auto;padding:3rem 1.5r
 .score-mid{background:rgba(245,158,11,.15);color:var(--accent4)}
 .score-low{background:rgba(239,68,68,.15);color:var(--danger)}
 
+/* PROGRESS BAR inside breakdown */
+.breakdown-bar-wrap{flex:1;margin:0 .75rem;height:4px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden}
+.breakdown-bar{height:100%;border-radius:2px;transition:width .5s ease}
+
 .btn-reset{background:none;border:1px solid var(--border);border-radius:10px;padding:.6rem 1.2rem;color:var(--muted);font-family:var(--font);font-size:.82rem;font-weight:600;cursor:pointer;transition:all .2s;margin-top:1rem}
 .btn-reset:hover{border-color:var(--accent);color:var(--text)}
 
@@ -94,12 +99,23 @@ main{position:relative;z-index:1;max-width:760px;margin:0 auto;padding:3rem 1.5r
 .step-title{font-size:.88rem;font-weight:700;margin-bottom:.3rem}
 .step-desc{font-size:.78rem;color:var(--muted);line-height:1.5}
 
-/* PLANIFY BANNER */
-.planify-banner{background:linear-gradient(135deg,rgba(79,70,229,.1),rgba(6,182,212,.1));border:1px solid rgba(79,70,229,.2);border-radius:20px;padding:1.5rem 2rem;margin-top:3rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;animation:fadeUp .7s .4s ease both}
+/* PLANIFY BANNER — logo animado */
+.planify-banner{background:linear-gradient(135deg,rgba(108,99,255,.1),rgba(255,101,132,.1));border:1px solid rgba(108,99,255,.2);border-radius:20px;padding:1.5rem 2rem;margin-top:3rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;animation:fadeUp .7s .4s ease both}
+.banner-logo{display:flex;align-items:center;gap:10px}
 .banner-text h3{font-size:.95rem;font-weight:700;margin-bottom:.25rem}
 .banner-text p{font-size:.82rem;color:var(--muted)}
-.banner-btn{background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;border-radius:10px;padding:.6rem 1.25rem;color:#fff;font-family:var(--font);font-weight:700;font-size:.85rem;cursor:pointer;text-decoration:none;white-space:nowrap;display:inline-block;transition:transform .15s,box-shadow .2s}
-.banner-btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(79,70,229,.35)}
+.banner-btn{background:linear-gradient(135deg,#6c63ff,#8b5cf6);border:none;border-radius:10px;padding:.6rem 1.25rem;color:#fff;font-family:var(--font);font-weight:700;font-size:.85rem;cursor:pointer;text-decoration:none;white-space:nowrap;display:inline-block;transition:transform .15s,box-shadow .2s}
+.banner-btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(108,99,255,.35)}
+
+/* Planify logo animations */
+@keyframes orbitSpin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+@keyframes pulsering{0%,100%{opacity:.15}50%{opacity:.4}}
+@keyframes facePulse{0%,100%{opacity:.85}50%{opacity:.5}}
+@keyframes arcDash{0%{stroke-dashoffset:0}100%{stroke-dashoffset:-22}}
+.planify-orbit{transform-origin:21px 21px;animation:orbitSpin 4s linear infinite}
+.planify-ring{animation:pulsering 3s ease-in-out infinite}
+.planify-face{animation:facePulse 2.5s ease-in-out infinite}
+.planify-arc{stroke-dasharray:5 3;animation:arcDash 1.5s linear infinite}
 
 /* FOOTER */
 footer{position:relative;z-index:1;text-align:center;padding:2rem 1.5rem 2.5rem;border-top:1px solid var(--border)}
@@ -113,11 +129,30 @@ footer{position:relative;z-index:1;text-align:center;padding:2rem 1.5rem 2.5rem;
 
 @media(max-width:600px){
   header{padding:0 1rem}
-  main{padding:2rem 1rem 4rem}
-  .calc-actions{grid-template-columns:1fr}
-  .steps{grid-template-columns:1fr}
-  .planify-banner{flex-direction:column;text-align:center}
-  .subject-row{grid-template-columns:1fr 100px 40px}
+  .header-sub{display:none}
+  main{padding:1.5rem .9rem 5rem}
+  .hero{padding:1.5rem 0 1.2rem}
+  .hero h1{font-size:clamp(1.8rem,8vw,2.6rem)}
+  .hero p{font-size:.92rem}
+  .calc-card{padding:1.25rem .9rem;border-radius:18px;margin:1.25rem 0}
+  .subject-row{grid-template-columns:1fr 88px 44px;gap:.4rem}
+  .subject-row input{padding:.65rem .75rem;font-size:.88rem}
+  .subject-row input[type=number]{padding:.65rem .5rem}
+  .btn-remove{width:44px;height:44px;min-height:44px}
+  .calc-actions{grid-template-columns:1fr;gap:.5rem}
+  .btn-add,.btn-calc{min-height:48px;font-size:.95rem}
+  .result-card{padding:1.75rem 1rem}
+  .result-num{font-size:4rem}
+  .breakdown-item{font-size:.82rem}
+  .how-section{margin:2rem 0}
+  .steps{grid-template-columns:1fr;gap:.5rem}
+  .step{padding:1rem}
+  .planify-banner{flex-direction:column;text-align:center;padding:1.25rem 1rem;gap:.75rem}
+  .banner-logo{justify-content:center}
+}
+@media(max-width:380px){
+  .subject-row{grid-template-columns:1fr 76px 44px}
+  .hero h1{font-size:1.7rem}
 }
 </style>
 </head>
@@ -127,7 +162,18 @@ footer{position:relative;z-index:1;text-align:center;padding:2rem 1.5rem 2.5rem;
 
 <header>
   <div class="logo">
-    <div class="logo-mark">🧮</div>
+    <svg width="34" height="34" viewBox="0 0 42 42" xmlns="http://www.w3.org/2000/svg" aria-label="Nexus logo">
+      <defs>
+        <linearGradient id="nxBg" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#4f46e5"/>
+          <stop offset="100%" stop-color="#06b6d4"/>
+        </linearGradient>
+      </defs>
+      <rect width="42" height="42" rx="12" fill="url(#nxBg)"/>
+      <line x1="11" y1="31" x2="11" y2="11" stroke="rgba(255,255,255,0.95)" stroke-width="3.5" stroke-linecap="round"/>
+      <line x1="31" y1="31" x2="31" y2="11" stroke="rgba(255,255,255,0.95)" stroke-width="3.5" stroke-linecap="round"/>
+      <line x1="11" y1="11" x2="31" y2="31" stroke="rgba(255,255,255,0.7)" stroke-width="3.5" stroke-linecap="round"/>
+    </svg>
     <span class="logo-text">Nexus</span>
   </div>
   <span class="header-sub">Calculadora de promedio</span>
@@ -166,10 +212,36 @@ footer{position:relative;z-index:1;text-align:center;padding:2rem 1.5rem 2.5rem;
     </div>
   </div>
 
+  <!-- Banner de Planify con logo animado real -->
   <div class="planify-banner">
-    <div class="banner-text">
-      <h3>📅 ¿Tienes tareas pendientes?</h3>
-      <p>Planify — organiza tu agenda escolar gratis.</p>
+    <div class="banner-logo">
+      <!-- Logo animado de Planify -->
+      <svg width="38" height="38" viewBox="0 0 42 42" xmlns="http://www.w3.org/2000/svg" aria-label="Planify">
+        <defs>
+          <linearGradient id="nb" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#6c63ff"/>
+            <stop offset="100%" stop-color="#a78bfa"/>
+          </linearGradient>
+          <linearGradient id="na" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#ff6584"/>
+            <stop offset="100%" stop-color="#f7971e"/>
+          </linearGradient>
+        </defs>
+        <rect width="42" height="42" rx="12" fill="url(#nb)"/>
+        <circle cx="21" cy="21" r="13" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1" class="planify-ring"/>
+        <circle cx="21" cy="21" r="7" fill="none" stroke="rgba(255,255,255,0.85)" stroke-width="1.5" class="planify-face"/>
+        <path d="M21 14 A7 7 0 0 1 28 21" fill="none" stroke="url(#na)" stroke-width="2.5" stroke-linecap="round" class="planify-arc"/>
+        <circle cx="21" cy="21" r="2" fill="white"/>
+        <line x1="21" y1="21" x2="21" y2="15.5" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="21" y1="21" x2="25" y2="23" stroke="white" stroke-width="1.2" stroke-linecap="round"/>
+        <g class="planify-orbit">
+          <circle cx="21" cy="8" r="2.2" fill="#ff6584"/>
+        </g>
+      </svg>
+      <div class="banner-text">
+        <h3>¿Tienes tareas pendientes?</h3>
+        <p>Planify — organiza tu agenda escolar gratis.</p>
+      </div>
     </div>
     <a href="https://bfriasdicent-oss.github.io/planify/" target="_blank" class="banner-btn">Ir a Planify →</a>
   </div>
@@ -192,9 +264,9 @@ function createRow(id,name='',note=''){
   row.className='subject-row';
   row.id=`row-${id}`;
   row.innerHTML=`
-    <input type="text" placeholder="Materia (ej: Matemáticas)" value="${name}" id="name-${id}">
-    <input type="number" placeholder="Nota (0-100)" min="0" max="100" value="${note}" id="note-${id}">
-    <button class="btn-remove" onclick="removeSubject(${id})" title="Eliminar">✕</button>
+    <input type="text" placeholder="Materia (ej: Matemáticas)" value="${name}" id="name-${id}" aria-label="Nombre de materia">
+    <input type="number" placeholder="Nota (0-100)" min="0" max="100" value="${note}" id="note-${id}" aria-label="Nota">
+    <button class="btn-remove" onclick="removeSubject(${id})" title="Eliminar materia" aria-label="Eliminar materia">✕</button>
   `;
   return row;
 }
@@ -203,7 +275,7 @@ function addSubject(name='',note=''){
   const id=Date.now();
   subjects.push(id);
   document.getElementById('subjects-list').appendChild(createRow(id,name,note));
-  document.getElementById(`name-${id}`).focus();
+  if(name==='')document.getElementById(`name-${id}`).focus();
 }
 
 function removeSubject(id){
@@ -213,18 +285,33 @@ function removeSubject(id){
   if(subjects.length===0)addSubject();
 }
 
+function clearErrors(){
+  document.querySelectorAll('.subject-row input').forEach(i=>i.classList.remove('error'));
+}
+
 function calculate(){
-  const data=subjects.map(id=>({
-    name:document.getElementById(`name-${id}`)?.value.trim()||'Sin nombre',
-    note:parseFloat(document.getElementById(`note-${id}`)?.value)||0
-  })).filter(d=>d.note>=0);
+  clearErrors();
+  let hasError=false;
 
-  if(!data.length){toast('❗ Agrega al menos una nota');return}
+  const data=subjects.map(id=>{
+    const nameEl=document.getElementById(`name-${id}`);
+    const noteEl=document.getElementById(`note-${id}`);
+    const note=parseFloat(noteEl?.value);
+    const name=nameEl?.value.trim()||'Sin nombre';
 
-  const invalid=data.find(d=>d.note<0||d.note>100);
-  if(invalid){toast('❗ Las notas deben ser entre 0 y 100');return}
+    if(noteEl&&(isNaN(note)||note<0||note>100)){
+      noteEl.classList.add('error');
+      hasError=true;
+    }
+    return{name,note:isNaN(note)?null:note,nameEl,noteEl};
+  });
 
-  const avg=data.reduce((s,d)=>s+d.note,0)/data.length;
+  if(hasError){toast('❗ Las notas deben ser entre 0 y 100');return}
+
+  const valid=data.filter(d=>d.note!==null);
+  if(!valid.length){toast('❗ Ingresa al menos una nota');return}
+
+  const avg=valid.reduce((s,d)=>s+d.note,0)/valid.length;
   const pass=avg>=70;
 
   document.getElementById('result-num').textContent=avg.toFixed(1);
@@ -235,24 +322,22 @@ function calculate(){
   badge.className=`result-badge ${pass?'pass':'fail'}`;
 
   const msgs={
-    pass:[
-      '¡Excelente trabajo! Sigue así 🚀',
-      '¡Muy bien! Tu esfuerzo vale la pena 💪',
-      '¡Aprobado! Vas por buen camino ⭐'
-    ],
-    fail:[
-      'No te rindas, puedes mejorar 💪',
-      'Estudia un poco más, tú puedes 📚',
-      'Habla con tu profe para mejorar 🎯'
-    ]
+    pass:['¡Excelente trabajo! Sigue así 🚀','¡Muy bien! Tu esfuerzo vale la pena 💪','¡Aprobado! Vas por buen camino ⭐'],
+    fail:['No te rindas, puedes mejorar 💪','Estudia un poco más, tú puedes 📚','Habla con tu profe para mejorar 🎯']
   };
   const pool=pass?msgs.pass:msgs.fail;
   document.getElementById('result-msg').textContent=pool[Math.floor(Math.random()*pool.length)];
 
   const breakdown=document.getElementById('breakdown');
-  breakdown.innerHTML=data.map(d=>{
+  breakdown.innerHTML=valid.map(d=>{
     const cls=d.note>=80?'score-high':d.note>=70?'score-mid':'score-low';
-    return`<div class="breakdown-item"><span class="breakdown-name">${d.name}</span><span class="breakdown-score ${cls}">${d.note}</span></div>`;
+    const barColor=d.note>=80?'#10b981':d.note>=70?'#f59e0b':'#ef4444';
+    const barW=Math.round(d.note);
+    return`<div class="breakdown-item">
+      <span class="breakdown-name">${d.name}</span>
+      <div class="breakdown-bar-wrap"><div class="breakdown-bar" style="width:${barW}%;background:${barColor}"></div></div>
+      <span class="breakdown-score ${cls}">${d.note}</span>
+    </div>`;
   }).join('');
 
   const card=document.getElementById('result-card');
@@ -261,10 +346,11 @@ function calculate(){
 }
 
 function reset(){
+  clearErrors();
   document.getElementById('result-card').classList.remove('show');
   subjects=[];
   document.getElementById('subjects-list').innerHTML='';
-  addSubject();
+  addSubject();addSubject();addSubject();
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
@@ -275,9 +361,12 @@ function toast(msg){
   setTimeout(()=>t.classList.remove('show'),2500);
 }
 
-addSubject();
-addSubject();
-addSubject();
+// Calcular con Enter en los inputs
+document.addEventListener('keydown',e=>{
+  if(e.key==='Enter'&&e.target.tagName==='INPUT')calculate();
+});
+
+addSubject();addSubject();addSubject();
 </script>
 </body>
 </html>
