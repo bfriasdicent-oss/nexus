@@ -156,9 +156,28 @@ footer{position:relative;z-index:1;text-align:center;padding:2rem 1.5rem 2.5rem;
 .toast{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--s2);border:1px solid var(--border);border-radius:12px;padding:.75rem 1.1rem;font-size:.85rem;font-weight:600;z-index:999;transform:translateY(80px);opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);box-shadow:0 8px 32px rgba(0,0,0,.4)}
 .toast.show{transform:translateY(0);opacity:1}
 
+/* DOWNLOAD SECTION */
+.download-section{margin-top:2rem;display:flex;flex-direction:column;gap:1rem}
+.download-card{background:var(--s1);border:1px solid rgba(79,70,229,.3);border-radius:20px;padding:1.4rem 1.75rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
+.download-icon{flex-shrink:0}
+.download-info{flex:1;min-width:0}
+.download-title{font-size:.95rem;font-weight:700;color:var(--text);margin-bottom:.2rem}
+.download-sub{font-size:.75rem;color:var(--muted)}
+.btn-download{background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;border-radius:12px;padding:.75rem 1.5rem;color:#fff;font-family:var(--font);font-size:.92rem;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:.5rem;transition:transform .15s,box-shadow .2s;white-space:nowrap;min-height:48px}
+.btn-download:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(79,70,229,.4)}
+.btn-download:active{transform:scale(.97)}
+.btn-download-icon{font-size:1rem}
+.thanks-msg{background:linear-gradient(135deg,rgba(79,70,229,.08),rgba(16,185,129,.08));border:1px solid rgba(79,70,229,.2);border-radius:16px;padding:1.25rem 1.5rem;display:none;align-items:flex-start;gap:.9rem;animation:fadeUp .5s ease both}
+.thanks-msg.show{display:flex}
+.thanks-icon{font-size:1.6rem;flex-shrink:0;margin-top:.1rem}
+.thanks-text{display:flex;flex-direction:column;gap:.3rem}
+.thanks-text strong{font-size:.9rem;color:var(--text)}
+.thanks-text span{font-size:.8rem;color:var(--muted);line-height:1.6}
+
 @media(max-width:600px){
-  header{padding:0 1rem}
-  .header-sub{display:none}
+  .download-card{flex-direction:column;align-items:flex-start;padding:1.1rem}
+  .btn-download{width:100%;justify-content:center}
+}
   main{padding:1.5rem .9rem 5rem}
   .hero{padding:1.5rem 0 1.2rem}
   .hero h1{font-size:clamp(1.8rem,8vw,2.6rem)}
@@ -278,6 +297,41 @@ footer{position:relative;z-index:1;text-align:center;padding:2rem 1.5rem 2.5rem;
   <div style="margin-top:3rem;padding:1.5rem;background:var(--s1);border:1px solid var(--border);border-radius:16px">
     <h2 style="font-size:.85rem;font-weight:700;color:var(--text);margin-bottom:.6rem">¿Cómo calcular tu promedio escolar?</h2>
     <p style="font-size:.78rem;color:var(--muted);line-height:1.7">Nexus es una calculadora de promedio escolar gratuita para estudiantes de todo el mundo. Ingresa el nombre de cada materia — Matemáticas, Español, Ciencias, Historia, Inglés — y su nota en escala del 0 al 100. Nexus calcula tu promedio automáticamente y te indica si aprobaste. Sin registro, sin descargas, gratis para siempre.</p>
+  </div>
+
+  <!-- SECCIÓN DE DESCARGA -->
+  <div class="download-section" id="download-section">
+    <div class="download-card" id="download-card">
+      <div class="download-icon">
+        <svg width="32" height="32" viewBox="0 0 42 42" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="dlBg" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#4f46e5"/><stop offset="100%" stop-color="#06b6d4"/>
+            </linearGradient>
+          </defs>
+          <rect width="42" height="42" rx="12" fill="url(#dlBg)"/>
+          <line x1="11" y1="31" x2="11" y2="11" stroke="rgba(255,255,255,0.95)" stroke-width="3.5" stroke-linecap="round"/>
+          <line x1="31" y1="31" x2="31" y2="11" stroke="rgba(255,255,255,0.95)" stroke-width="3.5" stroke-linecap="round"/>
+          <line x1="11" y1="11" x2="31" y2="31" stroke="rgba(255,255,255,0.7)" stroke-width="3.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="download-info">
+        <div class="download-title">Nexus — Calculadora de Promedio</div>
+        <div class="download-sub">Archivo HTML · Funciona sin internet · Gratis</div>
+      </div>
+      <button class="btn-download" onclick="downloadNexus()" aria-label="Descargar Nexus">
+        <span class="btn-download-icon">⬇</span> Descargar
+      </button>
+    </div>
+
+    <!-- Mensaje de gracias (aparece tras 8 segundos si no descargó) -->
+    <div class="thanks-msg" id="thanks-msg">
+      <div class="thanks-icon">🙏</div>
+      <div class="thanks-text">
+        <strong>¡Gracias por tu confianza!</strong>
+        <span>Estamos trabajando en mejoras increíbles para ti. Nexus seguirá siendo gratis, rápido y cada vez mejor. — Charro Labs ❤️</span>
+      </div>
+    </div>
   </div>
 
 </main>
@@ -400,6 +454,25 @@ function toast(msg){
 document.addEventListener('keydown',e=>{
   if(e.key==='Enter'&&e.target.tagName==='INPUT')calculate();
 });
+
+// Descarga directa
+function downloadNexus(){
+  const html=document.documentElement.outerHTML;
+  const blob=new Blob([html],{type:'text/html;charset=utf-8'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;
+  a.download='Nexus.html';
+  a.click();
+  URL.revokeObjectURL(url);
+  clearTimeout(window._thanksTimer);
+  document.getElementById('thanks-msg').classList.remove('show');
+}
+
+// Mostrar mensaje de gracias si no descarga en 8s
+window._thanksTimer=setTimeout(()=>{
+  document.getElementById('thanks-msg').classList.add('show');
+},8000);
 
 addSubject();addSubject();addSubject();
 </script>
